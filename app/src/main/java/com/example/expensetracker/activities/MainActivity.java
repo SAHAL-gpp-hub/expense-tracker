@@ -27,14 +27,24 @@ public class MainActivity extends AppCompatActivity {
     private TransactionAdapter adapter;
     private AppDatabase database;
 
+    // SUMMARY TEXTVIEWS
+    private TextView txtTotalIncome, txtTotalExpense, txtBalance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Summary TextViews
+        txtTotalIncome = findViewById(R.id.txtTotalIncome);
+        txtTotalExpense = findViewById(R.id.txtTotalExpense);
+        txtBalance = findViewById(R.id.txtBalance);
+
+        // See All → SummaryActivity
         TextView seeAll = findViewById(R.id.txtSeeAll);
         seeAll.setOnClickListener(v ->
                 startActivity(new Intent(this, SummaryActivity.class))
@@ -42,15 +52,20 @@ public class MainActivity extends AppCompatActivity {
 
         database = AppDatabase.getInstance(this);
 
+        // RecyclerView
         recyclerView = findViewById(R.id.recyclerTransactions);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        // FAB
         FloatingActionButton fab = findViewById(R.id.fabAdd);
         fab.setOnClickListener(v -> showAddDialog());
 
+        // Initial load
         loadTransactions();
+        loadSummary();
     }
 
+    // MENU
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -66,21 +81,53 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // LOAD TRANSACTIONS
     private void loadTransactions() {
         Executors.newSingleThreadExecutor().execute(() -> {
             List<TransactionEntity> list =
                     database.transactionDao().getAllTransactions();
 
             runOnUiThread(() -> {
-                adapter = new TransactionAdapter(list, database, this::loadTransactions);
+                adapter = new TransactionAdapter(
+                        list,
+                        database,
+                        () -> {
+                            loadTransactions();
+                            loadSummary(); // 🔥 refresh summary after delete
+                        }
+                );
                 recyclerView.setAdapter(adapter);
             });
         });
     }
 
+    // LOAD SUMMARY (IMPORTANT)
+    private void loadSummary() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+
+            double income = database.transactionDao().getTotalIncome();
+            double expense = database.transactionDao().getTotalExpense();
+            double balance = income - expense;
+
+            runOnUiThread(() -> {
+                txtTotalIncome.setText("Total Income\n$" + income);
+                txtTotalExpense.setText("Total Expense\n$" + expense);
+                txtBalance.setText("Current Balance\n$" + balance);
+            });
+        });
+    }
+
+    // ADD TRANSACTION DIALOG
     private void showAddDialog() {
         AddTransactionDialog dialog =
-                new AddTransactionDialog(this, database, this::loadTransactions);
+                new AddTransactionDialog(
+                        this,
+                        database,
+                        () -> {
+                            loadTransactions();
+                            loadSummary(); // 🔥 refresh summary after add
+                        }
+                );
         dialog.show();
     }
 }

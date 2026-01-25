@@ -21,14 +21,23 @@ public interface TransactionDao {
     List<TransactionEntity> getAllTransactions();
 
     // Calculate total income
-    @Query("SELECT SUM(amount) FROM transactions WHERE type = 'INCOME'")
-    double getTotalIncome();
 
-    // Calculate total expense
-    @Query("SELECT SUM(amount) FROM transactions WHERE type = 'EXPENSE'")
-    double getTotalExpense();
 
     // Delete transaction
     @Delete
     void deleteTransaction(TransactionEntity transaction);
+
+    @Query("SELECT IFNULL(SUM(amount),0) FROM transactions WHERE type='INCOME'")
+    double getTotalIncome();
+
+    @Query("SELECT IFNULL(SUM(amount),0) FROM transactions WHERE type='EXPENSE'")
+    double getTotalExpense();
+
+    @Query("SELECT COUNT(*) FROM transactions WHERE type = 'INCOME'")
+    int getIncomeCount();
+
+    @Query("SELECT COUNT(*) FROM transactions WHERE type = 'EXPENSE'")
+    int getExpenseCount();
+
+
 }
