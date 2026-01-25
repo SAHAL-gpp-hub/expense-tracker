@@ -1,5 +1,6 @@
 package com.example.expensetracker.adapters;
 
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,12 +72,22 @@ public class TransactionAdapter
             holder.imgType.setColorFilter(Color.RED);
         }
 
-        // Delete on long press
         holder.itemView.setOnLongClickListener(v -> {
-            Executors.newSingleThreadExecutor().execute(() -> {
-                database.transactionDao().deleteTransaction(t);
-                refreshCallback.run();
-            });
+
+            new AlertDialog.Builder(v.getContext())
+                    .setTitle("Delete Transaction")
+                    .setMessage("Are you sure you want to delete this transaction?")
+                    .setPositiveButton("Delete", (dialog, which) -> {
+
+                        Executors.newSingleThreadExecutor().execute(() -> {
+                            database.transactionDao().deleteTransaction(t);
+                            refreshCallback.run();
+                        });
+
+                    })
+                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                    .show();
+
             return true;
         });
     }

@@ -2,6 +2,7 @@ package com.example.expensetracker.utils;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,14 +24,23 @@ public class AddTransactionDialog extends Dialog {
         super(context);
         setContentView(R.layout.dialog_add_transaction);
 
-        // Initialize views FIRST
+        // 🔥 FIX: FORCE DIALOG WIDTH (MOST IMPORTANT)
+        if (getWindow() != null) {
+            getWindow().setLayout(
+                    (int) (context.getResources().getDisplayMetrics().widthPixels * 0.95),
+                    WindowManager.LayoutParams.WRAP_CONTENT
+            );
+        }
+
+        // Views
         EditText edtAmount = findViewById(R.id.edtAmount);
         Spinner spinner = findViewById(R.id.spinnerCategory);
-        RadioButton income = findViewById(R.id.radioIncome);
+        RadioButton radioIncome = findViewById(R.id.radioIncome);
+        RadioButton radioExpense = findViewById(R.id.radioExpense);
         Button btnSave = findViewById(R.id.btnSave);
         Button btnCancel = findViewById(R.id.btnCancel);
 
-        // Spinner adapter (MANDATORY)
+        // Spinner adapter
         ArrayAdapter<CharSequence> adapter =
                 ArrayAdapter.createFromResource(
                         context,
@@ -46,7 +56,6 @@ public class AddTransactionDialog extends Dialog {
 
             String amountText = edtAmount.getText().toString().trim();
 
-            // Validation
             if (amountText.isEmpty()) {
                 Toast.makeText(context, "Enter amount", Toast.LENGTH_SHORT).show();
                 return;
@@ -64,7 +73,7 @@ public class AddTransactionDialog extends Dialog {
             }
 
             String category = spinner.getSelectedItem().toString();
-            String type = income.isChecked() ? "INCOME" : "EXPENSE";
+            String type = radioIncome.isChecked() ? "INCOME" : "EXPENSE";
 
             TransactionEntity transaction =
                     new TransactionEntity(

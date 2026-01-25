@@ -1,8 +1,13 @@
 package com.example.expensetracker.activities;
-import com.example.expensetracker.utils.AddTransactionDialog;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,15 +15,11 @@ import com.example.expensetracker.R;
 import com.example.expensetracker.adapters.TransactionAdapter;
 import com.example.expensetracker.database.AppDatabase;
 import com.example.expensetracker.models.TransactionEntity;
+import com.example.expensetracker.utils.AddTransactionDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 import java.util.concurrent.Executors;
-
-import android.content.Intent;
-import android.view.Menu;
-import android.view.MenuItem;
-import androidx.appcompat.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,12 +29,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        TextView seeAll = findViewById(R.id.txtSeeAll);
+        seeAll.setOnClickListener(v ->
+                startActivity(new Intent(this, SummaryActivity.class))
+        );
 
         database = AppDatabase.getInstance(this);
 
@@ -45,11 +50,13 @@ public class MainActivity extends AppCompatActivity {
 
         loadTransactions();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_summary) {
@@ -58,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void loadTransactions() {
         Executors.newSingleThreadExecutor().execute(() -> {
             List<TransactionEntity> list =
@@ -71,7 +79,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showAddDialog() {
-        AddTransactionDialog dialog = new AddTransactionDialog(this, database, this::loadTransactions);
+        AddTransactionDialog dialog =
+                new AddTransactionDialog(this, database, this::loadTransactions);
         dialog.show();
     }
 }
