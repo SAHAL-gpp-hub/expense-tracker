@@ -11,9 +11,10 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:title="Smart Expense Tracker"
-        android:titleTextColor="@android:color/white"
-        android:background="@color/darkBackground"/>
+        android:background="@color/darkBackground"
+        app:title="Smart Expense Tracker"
+        app:titleTextColor="@android:color/white"
+        app:titleCentered="false"/>
 
     <ScrollView
         android:layout_width="match_parent"

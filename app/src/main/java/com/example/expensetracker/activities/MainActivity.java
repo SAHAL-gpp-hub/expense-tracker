@@ -35,9 +35,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Toolbar
+        // ✅ Toolbar title update (matches screenshot)
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Smart Expense Tracker");
+        }
 
         // Summary TextViews
         txtTotalIncome = findViewById(R.id.txtTotalIncome);
@@ -93,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                         database,
                         () -> {
                             loadTransactions();
-                            loadSummary(); // 🔥 refresh summary after delete
+                            loadSummary();
                         }
                 );
                 recyclerView.setAdapter(adapter);
@@ -101,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // LOAD SUMMARY (IMPORTANT)
+    // LOAD SUMMARY
     private void loadSummary() {
         Executors.newSingleThreadExecutor().execute(() -> {
 
@@ -125,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                         database,
                         () -> {
                             loadTransactions();
-                            loadSummary(); // 🔥 refresh summary after add
+                            loadSummary();
                         }
                 );
         dialog.show();

@@ -11,9 +11,10 @@
         android:id="@+id/toolbarSummary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:title="Financial Summary"
-        android:titleTextColor="@android:color/white"
         android:background="@color/darkBackground"
+        app:title="Financial Summary"
+        app:titleTextColor="@android:color/white"
+        app:titleCentered="false"
         app:navigationIcon="@drawable/ic_back"/>
 
     <ScrollView

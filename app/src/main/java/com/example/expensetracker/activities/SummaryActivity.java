@@ -27,7 +27,9 @@ public class SummaryActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbarSummary);
         setSupportActionBar(toolbar);
 
+        // ✅ Title + back arrow (matches screenshot)
         if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Financial Summary");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
