@@ -34,14 +34,29 @@
                 app:cardCornerRadius="18dp"
                 app:cardBackgroundColor="#183C34">
 
-                <TextView
-                    android:id="@+id/txtTotalIncome"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     android:padding="20dp"
-                    android:text="Total Income\n$0"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"/>
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_income_wallet"
+                        android:layout_marginEnd="12dp"
+                        app:tint="#4ADE80" />
+
+                    <TextView
+                        android:id="@+id/txtTotalIncome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total Income\n$0"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <!-- TOTAL EXPENSE -->
@@ -52,17 +67,32 @@
                 app:cardCornerRadius="18dp"
                 app:cardBackgroundColor="#3A1F2A">
 
-                <TextView
-                    android:id="@+id/txtTotalExpense"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     android:padding="20dp"
-                    android:text="Total Expense\n$0"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"/>
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_expense"
+                        android:layout_marginEnd="12dp"
+                        app:tint="#FB7185" />
+
+                    <TextView
+                        android:id="@+id/txtTotalExpense"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total Expense\n$0"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- BALANCE -->
+            <!-- CURRENT BALANCE -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,22 +100,37 @@
                 app:cardCornerRadius="18dp"
                 app:cardBackgroundColor="#1E293B">
 
-                <TextView
-                    android:id="@+id/txtBalance"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     android:padding="20dp"
-                    android:text="Current Balance\n$0"
-                    android:textColor="@android:color/white"
-                    android:textSize="22sp"
-                    android:textStyle="bold"/>
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_income_wallet"
+                        android:layout_marginEnd="12dp"
+                        app:tint="#CBD5E1" />
+
+                    <TextView
+                        android:id="@+id/txtBalance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Current Balance\n$0"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <!-- HEADER -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
 
                 <TextView
                     android:layout_width="0dp"
@@ -109,7 +154,7 @@
                 android:id="@+id/recyclerTransactions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"/>
+                android:layout_marginTop="8dp"/>
 
         </LinearLayout>
     </ScrollView>

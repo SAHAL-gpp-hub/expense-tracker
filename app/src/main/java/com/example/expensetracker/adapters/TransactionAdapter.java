@@ -1,6 +1,5 @@
 package com.example.expensetracker.adapters;
 
-import android.app.AlertDialog;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.expensetracker.R;
@@ -37,14 +37,14 @@ public class TransactionAdapter
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtAmount, txtCategory, txtDate;
-        ImageView imgType;
+        ImageView imgCategory;
 
         ViewHolder(View view) {
             super(view);
             txtAmount = view.findViewById(R.id.txtAmount);
             txtCategory = view.findViewById(R.id.txtCategory);
             txtDate = view.findViewById(R.id.txtDate);
-            imgType = view.findViewById(R.id.imgType);
+            imgCategory = view.findViewById(R.id.imgCategory); // ✅ FIXED ID
         }
     }
 
@@ -58,36 +58,60 @@ public class TransactionAdapter
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
         TransactionEntity t = list.get(position);
 
         holder.txtCategory.setText(t.getCategory());
-        holder.txtAmount.setText("$" + t.getAmount());
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        // Format date
+        SimpleDateFormat sdf =
+                new SimpleDateFormat("MMM d, yyyy", Locale.getDefault());
         holder.txtDate.setText(sdf.format(t.getDate()));
 
-        if ("INCOME".equals(t.getType())) {
-            holder.imgType.setColorFilter(Color.GREEN);
-        } else {
-            holder.imgType.setColorFilter(Color.RED);
+        // CATEGORY ICON (Material Icons)
+        switch (t.getCategory()) {
+            case "Food":
+                holder.imgCategory.setImageResource(R.drawable.ic_food);
+                break;
+            case "Shopping":
+                holder.imgCategory.setImageResource(R.drawable.ic_shopping);
+                break;
+            case "Transport":
+                holder.imgCategory.setImageResource(R.drawable.ic_transport);
+                break;
+            case "Bills":
+                holder.imgCategory.setImageResource(R.drawable.ic_bills);
+                break;
+            case "Salary":
+            default:
+                holder.imgCategory.setImageResource(R.drawable.ic_income_wallet);
+                break;
         }
 
-        holder.itemView.setOnLongClickListener(v -> {
+        // AMOUNT + COLOR
+        if ("INCOME".equals(t.getType())) {
+            holder.txtAmount.setText("+$" + t.getAmount());
+            holder.txtAmount.setTextColor(Color.parseColor("#4ADE80"));
+            holder.imgCategory.setColorFilter(Color.parseColor("#4ADE80"));
+        } else {
+            holder.txtAmount.setText("-$" + t.getAmount());
+            holder.txtAmount.setTextColor(Color.parseColor("#FB7185"));
+            holder.imgCategory.setColorFilter(Color.parseColor("#FB7185"));
+        }
 
+        // LONG PRESS → DELETE CONFIRMATION
+        holder.itemView.setOnLongClickListener(v -> {
             new AlertDialog.Builder(v.getContext())
                     .setTitle("Delete Transaction")
                     .setMessage("Are you sure you want to delete this transaction?")
                     .setPositiveButton("Delete", (dialog, which) -> {
-
                         Executors.newSingleThreadExecutor().execute(() -> {
                             database.transactionDao().deleteTransaction(t);
                             refreshCallback.run();
                         });
-
                     })
-                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                    .setNegativeButton("Cancel", null)
                     .show();
-
             return true;
         });
     }
