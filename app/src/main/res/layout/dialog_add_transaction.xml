@@ -1,133 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/transparent">
+    android:layout_margin="16dp"
+    app:cardCornerRadius="26dp"
+    app:cardBackgroundColor="#1E293B">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minWidth="300dp"
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:background="@color/darkBackground">
+        android:layout_height="wrap_content">
 
-        <!-- TITLE -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Transaction"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"
-            android:layout_marginBottom="16dp"/>
-
-        <!-- TRANSACTION TYPE -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Transaction Type"
-            android:textColor="#CBD5E1"
-            android:textSize="14sp"
-            android:layout_marginBottom="8dp"/>
-
-        <RadioGroup
-            android:id="@+id/radioType"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="24dp">
 
-            <RadioButton
-                android:id="@+id/radioExpense"
-                android:layout_width="0dp"
+            <!-- HEADER -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Expense"
-                android:checked="true"
-                android:singleLine="true"
-                android:textColor="@android:color/white"/>
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-            <RadioButton
-                android:id="@+id/radioIncome"
-                android:layout_width="0dp"
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Add Transaction"
+                    android:textColor="@android:color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"/>
+
+                <ImageView
+                    android:id="@+id/btnClose"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_close"
+                    app:tint="#94A3B8"/>
+            </LinearLayout>
+
+            <!-- TRANSACTION TYPE -->
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Income"
-                android:singleLine="true"
-                android:textColor="@android:color/white"/>
-        </RadioGroup>
+                android:layout_marginTop="24dp"
+                android:text="Transaction Type"
+                android:textColor="#CBD5E1"
+                android:textSize="14sp"/>
 
-        <!-- AMOUNT -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Amount"
-            android:textColor="#CBD5E1"
-            android:textSize="14sp"
-            android:layout_marginTop="16dp"/>
+            <RadioGroup
+                android:id="@+id/radioGroupType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/edtAmount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="$ 0.00"
-            android:inputType="numberDecimal"
-            android:textColor="@android:color/white"
-            android:textColorHint="#64748B"
-            android:padding="14dp"/>
+                <RadioButton
+                    android:id="@+id/radioExpense"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Expense"
+                    android:gravity="center"
+                    android:checked="true"
+                    android:button="@null"
+                    android:background="@drawable/bg_radio_expense"
+                    android:textColor="@android:color/white"/>
 
-        <!-- CATEGORY -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Category"
-            android:textColor="#CBD5E1"
-            android:textSize="14sp"
-            android:layout_marginTop="16dp"/>
+                <RadioButton
+                    android:id="@+id/radioIncome"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Income"
+                    android:gravity="center"
+                    android:button="@null"
+                    android:background="@drawable/bg_radio_income"
+                    android:textColor="#94A3B8"/>
+            </RadioGroup>
 
-        <Spinner
-            android:id="@+id/spinnerCategory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="12dp"/>
+            <!-- AMOUNT -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Amount"
+                android:textColor="#CBD5E1"
+                android:textSize="14sp"/>
 
-        <!-- DATE -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Date"
-            android:textColor="#CBD5E1"
-            android:textSize="14sp"
-            android:layout_marginTop="16dp"/>
+            <EditText
+                android:id="@+id/edtAmount"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:hint="$ 0.00"
+                android:inputType="numberDecimal"
+                android:textColor="@android:color/white"
+                android:background="@drawable/bg_input"
+                android:padding="16dp"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="01/24/2026"
-            android:textColor="@android:color/white"
-            android:padding="14dp"
-            android:background="#1E293B"/>
+            <!-- CATEGORY -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Category"
+                android:textColor="#CBD5E1"
+                android:textSize="14sp"/>
 
-        <!-- SAVE -->
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="Save"
-            android:textColor="@android:color/white"
-            android:backgroundTint="#22C55E"
-            android:layout_marginTop="24dp"/>
+            <Spinner
+                android:id="@+id/spinnerCategory"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_input"/>
 
-        <!-- CANCEL -->
-        <Button
-            android:id="@+id/btnCancel"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="Cancel"
-            android:textColor="@android:color/white"
-            android:backgroundTint="#334155"
-            android:layout_marginTop="12dp"/>
+            <!-- DATE -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Date"
+                android:textColor="#CBD5E1"
+                android:textSize="14sp"/>
 
-    </LinearLayout>
-</ScrollView>
+            <TextView
+                android:id="@+id/txtDate"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:text="Select Date"
+                android:textColor="@android:color/white"
+                android:background="@drawable/bg_input"/>
+
+            <!-- SAVE -->
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="32dp"
+                android:text="Save Transaction"
+                android:textColor="@android:color/white"
+                android:background="@drawable/bg_btn_save"/>
+
+            <!-- CANCEL -->
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="12dp"
+                android:text="Cancel"
+                android:textColor="#CBD5E1"
+                android:background="@drawable/bg_btn_cancel"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.cardview.widget.CardView>
