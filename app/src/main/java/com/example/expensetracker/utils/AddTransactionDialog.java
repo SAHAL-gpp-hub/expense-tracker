@@ -32,6 +32,16 @@ public class AddTransactionDialog extends Dialog {
         super(context);
         setContentView(R.layout.dialog_add_transaction);
 
+        if (getWindow() != null) {
+            getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            // Optional: control width
+            getWindow().setLayout(
+                    (int) (context.getResources().getDisplayMetrics().widthPixels * 0.95),
+                    WindowManager.LayoutParams.WRAP_CONTENT
+            );
+        }
+
         /* 🔥 FORCE DIALOG WIDTH */
         if (getWindow() != null) {
             getWindow().setLayout(

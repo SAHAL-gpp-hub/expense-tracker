@@ -6,6 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 
 import com.example.expensetracker.models.TransactionEntity;
+import com.example.expensetracker.models.CategorySum;
 
 import java.util.List;
 
@@ -20,24 +21,32 @@ public interface TransactionDao {
     @Query("SELECT * FROM transactions ORDER BY date DESC")
     List<TransactionEntity> getAllTransactions();
 
-    // Calculate total income
-
-
     // Delete transaction
     @Delete
     void deleteTransaction(TransactionEntity transaction);
 
-    @Query("SELECT IFNULL(SUM(amount),0) FROM transactions WHERE type='INCOME'")
+    // Total income
+    @Query("SELECT IFNULL(SUM(amount), 0) FROM transactions WHERE type = 'INCOME'")
     double getTotalIncome();
 
-    @Query("SELECT IFNULL(SUM(amount),0) FROM transactions WHERE type='EXPENSE'")
+    // Total expense
+    @Query("SELECT IFNULL(SUM(amount), 0) FROM transactions WHERE type = 'EXPENSE'")
     double getTotalExpense();
 
+    // Income count
     @Query("SELECT COUNT(*) FROM transactions WHERE type = 'INCOME'")
     int getIncomeCount();
 
+    // Expense count
     @Query("SELECT COUNT(*) FROM transactions WHERE type = 'EXPENSE'")
     int getExpenseCount();
 
-
+    // Expense grouped by category (for pie chart)
+    @Query(
+            "SELECT category, SUM(amount) AS total " +
+                    "FROM transactions " +
+                    "WHERE type = 'EXPENSE' " +
+                    "GROUP BY category"
+    )
+    List<CategorySum> getExpenseByCategory();
 }
