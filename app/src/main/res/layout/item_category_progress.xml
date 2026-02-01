@@ -1,0 +1,61 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginBottom="20dp">
+
+    <!-- TOP ROW -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <View
+            android:id="@+id/dot"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:background="@drawable/bg_dot"
+            android:layout_marginEnd="10dp"/>
+
+        <TextView
+            android:id="@+id/txtCategory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Shopping"
+            android:textColor="#E5E7EB"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/txtAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$370"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- PROGRESS -->
+    <ProgressBar
+        android:id="@+id/progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_marginTop="8dp"
+        android:max="100"
+        android:progress="50"
+        android:progressDrawable="@drawable/bg_progress"/>
+
+    <!-- PERCENT -->
+    <TextView
+        android:id="@+id/txtPercent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="48.1% of total expenses"
+        android:textColor="#94A3B8"
+        android:textSize="13sp"
+        android:layout_marginTop="6dp"/>
+</LinearLayout>

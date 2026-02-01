@@ -1,6 +1,9 @@
 package com.example.expensetracker.activities;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +26,7 @@ public class SummaryActivity extends AppCompatActivity {
     private TextView txtSummaryBalance, txtSummaryIncome, txtSummaryExpense;
     private TextView txtIncomeCount, txtExpenseCount, txtMonthlyChange;
     private PieChart pieChart;
+    private LinearLayout categoryContainer;
 
     private AppDatabase database;
 
@@ -50,11 +54,13 @@ public class SummaryActivity extends AppCompatActivity {
         txtExpenseCount = findViewById(R.id.txtExpenseCount);
         txtMonthlyChange = findViewById(R.id.txtMonthlyChange);
         pieChart = findViewById(R.id.pieChart);
+        categoryContainer = findViewById(R.id.categoryContainer);
 
         database = AppDatabase.getInstance(this);
 
         loadSummary();
         loadExpensePie();
+        loadCategoryBreakdown(); // ✅ CALL ONCE
     }
 
     private void loadSummary() {
@@ -95,27 +101,22 @@ public class SummaryActivity extends AppCompatActivity {
                 }
 
                 double totalExpense = 0;
-                for (CategorySum c : list) {
-                    totalExpense += c.total;
-                }
+                for (CategorySum c : list) totalExpense += c.total;
 
                 ArrayList<PieEntry> entries = new ArrayList<>();
-
                 for (CategorySum c : list) {
-                    float percent =
-                            (float) ((c.total / totalExpense) * 100);
+                    float percent = (float) ((c.total / totalExpense) * 100);
                     entries.add(new PieEntry(percent, c.category));
                 }
 
                 PieDataSet dataSet = new PieDataSet(entries, "");
                 dataSet.setColors(new int[]{
-                        0xFFE45765, // Shopping
-                        0xFFD65DB1, // Bills
-                        0xFF9D5CFF, // Food
-                        0xFF7B7DFF, // Transport
-                        0xFF5E60CE  // Coffee
+                        0xFFE45765,
+                        0xFFD65DB1,
+                        0xFF9D5CFF,
+                        0xFF7B7DFF,
+                        0xFF5E60CE
                 });
-                dataSet.setSliceSpace(2f);
                 dataSet.setValueTextSize(14f);
                 dataSet.setValueTextColor(android.graphics.Color.WHITE);
 
@@ -127,6 +128,63 @@ public class SummaryActivity extends AppCompatActivity {
                 pieChart.getDescription().setEnabled(false);
                 pieChart.getLegend().setTextColor(android.graphics.Color.WHITE);
                 pieChart.invalidate();
+            });
+        });
+    }
+
+    private void loadCategoryBreakdown() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+
+            List<CategorySum> list =
+                    database.transactionDao().getExpenseByCategory();
+            double totalExpense =
+                    database.transactionDao().getTotalExpense();
+
+            runOnUiThread(() -> {
+                categoryContainer.removeAllViews();
+
+                int[] colors = {
+                        0xFFE45765,
+                        0xFFD65DB1,
+                        0xFF9D5CFF,
+                        0xFF7B7DFF,
+                        0xFF5E60CE
+                };
+
+                int index = 0;
+
+                for (CategorySum item : list) {
+
+                    View row = getLayoutInflater()
+                            .inflate(R.layout.item_category_progress,
+                                    categoryContainer,
+                                    false);
+
+                    TextView txtCategory = row.findViewById(R.id.txtCategory);
+                    TextView txtAmount = row.findViewById(R.id.txtAmount);
+                    TextView txtPercent = row.findViewById(R.id.txtPercent);
+                    ProgressBar progress = row.findViewById(R.id.progress);
+                    View dot = row.findViewById(R.id.dot);
+
+                    double percent = totalExpense == 0
+                            ? 0
+                            : (item.total / totalExpense) * 100;
+
+                    txtCategory.setText(item.category);
+                    txtAmount.setText("$" + (int) item.total);
+                    txtPercent.setText(
+                            String.format("%.1f%% of total expenses", percent)
+                    );
+
+                    progress.setProgress((int) percent);
+
+                    int color = colors[index % colors.length];
+                    progress.getProgressDrawable().setTint(color);
+                    dot.getBackground().setTint(color);
+
+                    categoryContainer.addView(row);
+                    index++;
+                }
             });
         });
     }
