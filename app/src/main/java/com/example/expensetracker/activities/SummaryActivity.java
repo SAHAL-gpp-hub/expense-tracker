@@ -25,6 +25,8 @@ public class SummaryActivity extends AppCompatActivity {
 
     private TextView txtSummaryBalance, txtSummaryIncome, txtSummaryExpense;
     private TextView txtIncomeCount, txtExpenseCount, txtMonthlyChange;
+
+    private TextView txtTotalTransactions, txtAvgTransaction;
     private PieChart pieChart;
     private LinearLayout categoryContainer;
 
@@ -38,6 +40,8 @@ public class SummaryActivity extends AppCompatActivity {
         // Toolbar
         Toolbar toolbar = findViewById(R.id.toolbarSummary);
         setSupportActionBar(toolbar);
+        txtTotalTransactions = findViewById(R.id.txtTotalTransactions);
+        txtAvgTransaction = findViewById(R.id.txtAvgTransaction);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Financial Summary");
@@ -73,6 +77,12 @@ public class SummaryActivity extends AppCompatActivity {
             int incomeCount = database.transactionDao().getIncomeCount();
             int expenseCount = database.transactionDao().getExpenseCount();
 
+            int totalTransactions = incomeCount + expenseCount;
+            double avgTransaction =
+                    totalTransactions == 0
+                            ? 0
+                            : (income + expense) / totalTransactions;
+
             double percent = income > 0 ? (balance / income) * 100 : 0;
 
             runOnUiThread(() -> {
@@ -83,6 +93,12 @@ public class SummaryActivity extends AppCompatActivity {
                 txtIncomeCount.setText(incomeCount + " transactions");
                 txtExpenseCount.setText(expenseCount + " transactions");
                 txtMonthlyChange.setText(String.format("+%.1f%%", percent));
+
+                // 🔥 NEW
+                txtTotalTransactions.setText(String.valueOf(totalTransactions));
+                txtAvgTransaction.setText(
+                        String.format("$%.0f", avgTransaction)
+                );
             });
         });
     }
